@@ -1,9 +1,9 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const jwt = require("jsonwebtoken");
-const cors = require("cors");
-const mysql = require("mysql2");
-const dotenv = require("dotenv");
+import express from "express";
+import bodyParser from "body-parser";
+import jwt, { Secret } from "jsonwebtoken";
+import cors from "cors";
+import mysql from "mysql2";
+import dotenv from "dotenv";
 
 const app = express();
 
@@ -26,37 +26,37 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/api/get", (req, res) => {
+app.get("/api/get", (_req: any, res: any) => {
   const sql = "SELECT * FROM todo_list";
-  db.query(sql, (err, result) => {
+  db.query(sql, (err: any, result: any) => {
     if (err) throw err;
     res.send(result);
   });
 });
 
-app.post("/api/insert", (req, res) => {
+app.post("/api/insert", (req: any, res: any) => {
   const sql = "INSERT INTO todo_list SET todo_name = ?";
 
-  db.query(sql, [req.body.name], (err, result) => {
+  db.query(sql, [req.body.name], (err: any, result: any) => {
     if (err) throw err;
     res.send(result);
   });
 });
 
-app.put("/api/update", (req, res) => {
+app.put("/api/update", (req: any, res: any) => {
   const { name, id } = req.body;
   const sql = "UPDATE todo_list SET todo_name = ? WHERE id = ?";
 
-  db.query(sql, [name, id], (err, result) => {
+  db.query(sql, [name, id], (err: any, result: any) => {
     if (err) throw err;
     res.send(result);
   });
 });
 
-app.delete("/api/delete/:id", (req, res) => {
+app.delete("/api/delete/:id", (req: any, res: any) => {
   const sql = "DELETE FROM todo_list WHERE id = ?";
 
-  db.query(sql, [req.params.id], (err, result) => {
+  db.query(sql, [req.params.id], (err: any, result: any) => {
     if (err) throw err;
     res.send(result);
   });
@@ -67,7 +67,7 @@ app.delete("/api/delete/:id", (req, res) => {
 // format of token
 // authorization: bearer <access_token>
 
-const verifyToken = (req, res, next) => {
+const verifyToken = (req: any, res: any, next: any) => {
   const bearerHeader = req.headers["authorization"];
 
   if (bearerHeader) {
@@ -79,14 +79,14 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-app.post("/api/login", (req, res) => {
+app.post("/api/login", (req: any, res: any) => {
   const { id, name, email } = req.body;
 
   jwt.sign(
     { user: { id, name, email } },
-    process.env.ACCESS_TOKEN_SECRET,
+    process.env.ACCESS_TOKEN_SECRET as Secret,
     { expiresIn: "15s" },
-    (err, token) => {
+    (_err: any, token: any) => {
       res.send({
         token,
       });
@@ -94,12 +94,12 @@ app.post("/api/login", (req, res) => {
   );
 });
 
-app.post("/api/post1", verifyToken, (req, res) => {
+app.post("/api/post1", verifyToken, (req: any, res: any) => {
   jwt.verify(
     req.token,
-    process.env.ACCESS_TOKEN_SECRET,
+    process.env.ACCESS_TOKEN_SECRET as Secret,
     {},
-    (err, authData) => {
+    (err: any, authData: any) => {
       if (err) {
         res.sendStatus(403);
       } else {

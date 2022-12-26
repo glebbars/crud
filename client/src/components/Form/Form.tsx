@@ -1,18 +1,20 @@
-import React, { useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import { usePostTodos } from "../../hooks/usePostTodos";
 
 export const Form = () => {
   const { mutate: postTodos } = usePostTodos();
 
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = useCallback((event:  React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    postTodos(inputRef.current.value);
+    if (inputRef.current?.value) {
+      postTodos(inputRef.current?.value);
 
-    inputRef.current.value = "";
-  };
+      inputRef.current.value = "";
+    }
+  }, [postTodos]);
 
   return (
     <form onSubmit={handleSubmit} className="form">

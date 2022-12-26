@@ -1,17 +1,16 @@
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 
-const updateTodo = ({ id, value }) => {
-  return axios.put("http://localhost:3001/api/update", {
-    id: id,
+const postTodos = async (value: string) => {
+  return await axios.post("http://localhost:3001/api/post1", {
     name: value,
   });
 };
 
-export const useUpdateTodo = () => {
+export const usePostTodos = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(updateTodo, {
+  return useMutation(postTodos, {
     onSuccess: () => {
       queryClient.invalidateQueries("todos");
     },

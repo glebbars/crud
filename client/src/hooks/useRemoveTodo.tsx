@@ -1,16 +1,14 @@
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 
-const postTodos = async (value) => {
-  return await axios.post("http://localhost:3001/api/insert", {
-    name: value,
-  });
+const deleteTodo = (id: number) => {
+  return axios.delete(`http://localhost:3001/api/delete/${id}`);
 };
 
-export const usePostTodos = () => {
+export const useRemoveTodo = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(postTodos, {
+  return useMutation(deleteTodo, {
     onSuccess: () => {
       queryClient.invalidateQueries("todos");
     },

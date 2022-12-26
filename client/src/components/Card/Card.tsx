@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, FC } from "react";
 import { useRemoveTodo } from "../../hooks/useRemoveTodo";
 import { EditCard } from "../EditCard/EditCard";
 
-export const Card = ({ todo }) => {
+import { ToDo } from "../../types/todo";
+
+interface CardProps {
+  todo: ToDo;
+}
+
+export const Card: FC<CardProps> = ({ todo }) => {
   const [isEditOn, setIsEditOn] = useState(false);
 
   const { mutate: removeTodo } = useRemoveTodo();
@@ -18,7 +24,7 @@ export const Card = ({ todo }) => {
         <EditCard todoId={todo.id} onClose={editClose} />
       ) : (
         <>
-          <h4 className="card-title">{todo.todo_name}</h4>
+          <h4 className="card-title">{todo.name}</h4>
           <div className="card-buttons-wrapper">
             <button className="card-button" onClick={editOpen}>
               Edit
