@@ -2,6 +2,6 @@ FROM mysql
 
 ENV MYSQL_ROOT_PASSWORD password
 
-COPY ./db/ /docker-entrypoint-initdb.d/
+ADD crud.sql /docker-entrypoint-initdb.d/
 
 EXPOSE 3306
